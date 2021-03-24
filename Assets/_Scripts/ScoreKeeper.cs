@@ -10,13 +10,14 @@ public class ScoreKeeper : MonoBehaviour
     
     [SerializeField] Text scoreText;
     [SerializeField] int currentScore = 0;
-    public Text highscore;
+    
     // Give gameobject numbers to count
     // Good idea to keep strings like this in a field, to avoid typos later.
     private const string highScoreKey = "HighScore";
+    private const string scoreKey = "Score";
     public static ScoreKeeper instance;
     void Awake() {
-        
+        // Creating an instance
         if (instance != null){
             Destroy(this.gameObject);
         }
@@ -28,22 +29,24 @@ public class ScoreKeeper : MonoBehaviour
     // set build of Score Text
     private void Start()
     {
-        scoreText = GameObject.Find("Score").GetComponent<Text>();
+        scoreText = GameObject.Find(scoreKey).GetComponent<Text>();
         currentScore = 0;
         ResetGameScore();
         scoreText.text = "Score: " + currentScore.ToString();
-        highScoreNum = PlayerPrefs.GetInt("HighScore");
+        highScoreNum = PlayerPrefs.GetInt(highScoreKey);
         Debug.Log(highScoreNum);
     }
 	
 	void Update()
     {
+        // Updating the Text Field in display
         scoreText.text = "Score: " + currentScore.ToString();
-        PlayerPrefs.GetInt("Score",currentScore).ToString();
+        PlayerPrefs.GetInt(scoreKey,currentScore).ToString();
         SetHighScore(); 
     }
+    // Reseting the Game Details awy the Player has died or Scene is ended
     public void ResetGameScore(){
-        PlayerPrefs.SetInt("Score",0);
+        PlayerPrefs.SetInt(scoreKey,0);
         currentScore = 0;
     }
     private void OnEnable() {
@@ -55,18 +58,16 @@ public class ScoreKeeper : MonoBehaviour
         PlayerPrefs.SetInt (highScoreKey, highScoreNum);
         // Save our data.
         PlayerPrefs.Save();
-    
-        // TODO: Delete me, for debugging only!
-        //Debug.Log("I'm being Disabled! The high score is currently: " + highScoreNum);
-  
+        Debug.Log("I'm being Disabled! The high score is currently: " + highScoreNum);
     }
     private void OnScreenChange(Scene scene, LoadSceneMode loadSceneMode){
-        scoreText = GameObject.Find("Score").GetComponent<Text>();
+        // Retriving the Text Object once going to a different scene
+        scoreText = GameObject.Find(scoreKey).GetComponent<Text>();
         ResetGameScore();
     }
     // Add score when the block is destroyed
     public void AddToScore(int score)
-    {
+    {// Add the score to Test displaying on Screen
         currentScore += score;
         scoreText.text = "Score: " + currentScore.ToString();
     }
@@ -80,7 +81,6 @@ public class ScoreKeeper : MonoBehaviour
             // Update the high score UI text.
             //highScoreText.text = highScore.ToString();
 
-            // TODO: Delete me, unless for some odd reason I am needed...
             PlayerPrefs.SetInt (highScoreKey, highScoreNum);
             PlayerPrefs.Save();
         } 

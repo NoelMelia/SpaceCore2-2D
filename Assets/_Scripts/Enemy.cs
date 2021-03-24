@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public float speed = 5f;
-    public float rotate_Speed = 50f;
-    public float bound_X = -11f;
-    public bool canShoot;
-    public bool canRotate;
-    public bool canMove = true;
+    [SerializeField]private float speed = 5f;
+    [SerializeField]private float rotate_Speed = 50f;
+    private float bound_X = -11f;
+    [SerializeField]private bool canShoot;
+    [SerializeField]private bool canRotate;
+    [SerializeField]private bool canMove = true;
     [SerializeField]private int scoreValue = 5;
-    public Transform attack_Point;
-    public GameObject bulletPrefab;
+    [SerializeField]private Transform attack_Point;
+    [SerializeField]private GameObject bulletPrefab;
 
     private Animator anim;
     private AudioSource explosionSound;
@@ -21,11 +21,12 @@ public class Enemy : MonoBehaviour
     private void Awake() {
         anim = GetComponent<Animator>();
         explosionSound = GetComponent<AudioSource>();
-        
     }
     private void Start() {
         score = FindObjectOfType<ScoreKeeper>();
         if(canRotate){
+            // Random the rotation of the asteriod when spawned
+            // If the canRotate is active
             if(Random.Range(0, 2) > 0){
                 rotate_Speed = Random.Range(rotate_Speed, rotate_Speed + 20f);
                 rotate_Speed *= -1f;
@@ -43,6 +44,7 @@ public class Enemy : MonoBehaviour
     }
     void Move(){
         if(canMove){
+            //Movement is activated
             Vector3 temp = transform.position;
             temp.x -= speed * Time.deltaTime;
             transform.position = temp;
@@ -52,11 +54,13 @@ public class Enemy : MonoBehaviour
                 gameObject.SetActive(false);
         }
     }
+    // Rotation of asteroid is determined 
     void RotateEnemy(){
         if(canRotate){
             transform.Rotate(new Vector3(0f, 0f, rotate_Speed * Time.deltaTime), Space.World);
         }
     }
+    // Enemy ship to start shooting is trigger is active
     void StartShooting(){
         GameObject bullet = Instantiate(bulletPrefab, attack_Point.position, Quaternion.identity);
         bullet.GetComponent<Bullet>().is_EnemyBullet = true;
@@ -68,6 +72,12 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
     }
     private void OnTriggerEnter2D(Collider2D target) {
+        // Once the bullet hits the enemy or asteroid then a number of 
+        // options is activated. 
+        // The enemy ship stops shooting, 
+        // Gamobject is Destroyed,
+        // Sound is played
+        // Animation is played
         if(target.tag == "Bullet"){
             canMove = false;
 
@@ -75,7 +85,7 @@ public class Enemy : MonoBehaviour
                 canShoot = false;
                 CancelInvoke("StartShooting");
             }
-            Invoke("TurnOffGameObject", 0.1f);
+            Invoke("TurnOffGameObject", 0.5f);
             
             //Display explosion Sounds
             explosionSound.Play();
@@ -83,6 +93,7 @@ public class Enemy : MonoBehaviour
             ProcessHit();
         }
     }
+    // Process hit and add score to Scoreboard
     private void ProcessHit(){
         score.AddToScore(scoreValue);
     }

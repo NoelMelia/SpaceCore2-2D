@@ -3666,8 +3666,8 @@ MonoBehaviour:
   - {fileID: 7943084095412544461, guid: 1eac88994066f1c42a2e267272f2989b, type: 3}
   enemyPrefabs: {fileID: 54029073512799388, guid: ad367045a9368d94aa04ac9b69d544bd,
     type: 3}
-  spawnTime: 2
-  spawnDelay: 3
+  spawnTime: 3
+  spawnDelay: 5
 --- !u!4 &2138472577
 Transform:
   m_ObjectHideFlags: 0

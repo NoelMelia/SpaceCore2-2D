@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class BackGroundScroll : MonoBehaviour
 {
-    public float scroll_Speed = 0.1f;
-
+    private float scroll_Speed = 0.1f;
     private MeshRenderer mesh;
     private float x_Scroll;
 
@@ -15,9 +14,8 @@ public class BackGroundScroll : MonoBehaviour
     }
 
     private void Update() {
-        if(PauseMenu.IsPaused){
-
-        }else{
+        if(!PauseMenu.IsPaused){
+            //When the pause button is pressed
             Scroll();
         }
         
@@ -25,6 +23,7 @@ public class BackGroundScroll : MonoBehaviour
 
     private void Scroll()
     {
+        //Scroll along the axis with the speed and time
         x_Scroll = Time.time * scroll_Speed;
 
         Vector2 offset = new Vector2(x_Scroll, 0f);

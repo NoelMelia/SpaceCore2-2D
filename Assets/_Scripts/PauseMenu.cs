@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    [SerializeField] public GameObject menuUI;
+    [SerializeField] private GameObject menuUI;
 
     private KeyCode pauseKey = KeyCode.Escape;
     private ScoreKeeper sc;
@@ -26,7 +26,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     void Update()
-    {
+    {// If Escape button is pressed
         if (Input.GetKeyDown(pauseKey))
         {
             SetPauseStatus(!isPaused);
@@ -38,23 +38,11 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         isPaused = false;
     }
-
-
     public void Pause() => SetPauseStatus(true);
     public void Resume() => SetPauseStatus(false);
 
-    public void QuitToMainMenu()
-    {
-        if (sc)
-        {
-            Time.timeScale = 1f;
-            SceneManager.LoadScene(0);
-            //sc.MainMenu(true);
-        }
-    }
-
     private void SetPauseStatus(bool status)
-    {
+    {// Setting the Status of th game either pause or not
         Time.timeScale = status ? 0f : 1f;
         menuUI.SetActive(status);
         isPaused = status;
@@ -66,23 +54,16 @@ public class PauseMenu : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
     }
-
-    //Set the Volume to increase or decrease using voice
-    public void RestartLevel()// Restart Level Button to Level 1
+    public void RestartLevel()
+    // Restart Level Button to Level 1
     {
-        //sc.ResetGameScore();
         SceneManager.LoadScene(1);
-        
     }
-
-    //Volume up and down
-    
-
+    // Back to Main Menu when in Pause Menu
     public void BackToMenu()
     {
         Time.timeScale = 0f;
         SceneManager.LoadScene(0);
         menuUI.SetActive(true);
-        
     }
 }

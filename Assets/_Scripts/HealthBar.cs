@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
+    [SerializeField]private Slider slider;
+    private static HealthBar instance;
+    // Creating an instance
     private void Awake() {
         if (instance != null){
             Destroy(this.gameObject);
@@ -14,8 +17,7 @@ public class HealthBar : MonoBehaviour
             DontDestroyOnLoad(this.gameObject);
         }
     }
-    public Slider slider;
-    public static HealthBar instance;
+    // Setting up the Slider info
     public void SetMaxHealth(int health)
     {
         slider.maxValue = health;

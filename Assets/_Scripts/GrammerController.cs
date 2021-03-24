@@ -15,33 +15,38 @@ public class GrammerController : MonoBehaviour
     private PauseMenu pauseMenu;
     private SetVolume setVolume; 
     private Player player;
-    public Text results;
-    // SRSG Speech Recogition Specification Grammer XML grammer
+    [SerializeField]private Text results;
     private GrammarRecognizer gr;
-    Scene sceneO;
-    private void Start() {
-       gr = new GrammarRecognizer(Path.Combine(Application.streamingAssetsPath,  
-         "MainMenu.xml"), ConfidenceLevel.Low); 
 
-        //gr = new GrammarRecognizer(Application.streamingAssetsPath + 
-        //"/SimpleGrammer.xml", ConfidenceLevel.Medium);
+    private void Start() {
+        // Load in the XML file
+        gr = new GrammarRecognizer(Path.Combine(Application.streamingAssetsPath,  
+        "MainMenu.xml"), ConfidenceLevel.Low); 
+        
+        // Begin the Grammar Recogniser
         gr.OnPhraseRecognized += GR_OnPhraseRecognized;
         gr.Start();
-        //Debug.Log("Grammer Load and Recogniser Started!");
-        results.text = _response;
+        Debug.Log("Grammer Load and Recogniser Started!");
+
         pauseMenu = FindObjectOfType<PauseMenu>();
         setVolume = FindObjectOfType<SetVolume>();
         player = FindObjectOfType<Player>();
-        sceneO = SceneManager.GetActiveScene();
-        Scene scene = SceneManager.GetActiveScene();
-        Debug.Log("Active Scene is '" + scene.name + "'.");
     }
     private void Update() {
         //Switch between the Words Spoken
-        //Debug.Log("Look");
+        PauseGameCommands();
+        VolumeCommands();
+        PauseCommands();
+        MovementCommands();
+        MenuCommands();
+    }
+    // Checking that game is not paused and Command to pause game
+    private void PauseGameCommands(){
+        // Each Key has an action assign and is called to determine the different phrases said
         if(_Keyresponse == "pause" && !PauseMenu.IsPaused){
             switch (_response)
             {
+                // Pause the Game Rule
                 case "pause the game":
                     pauseMenu.Pause();
                     break;
@@ -49,42 +54,18 @@ public class GrammerController : MonoBehaviour
             results.text = "Game Paused " + _response;
             _response = "";
         }
-        if(_Keyresponse == "pause" && PauseMenu.IsPaused){
-            switch (_response)
-            {
-                case "continue":
-                    pauseMenu.Resume();
-                    break;
-                case "restart":
-                    pauseMenu.RestartLevel();
-                    break;
-                case "quit":
-                    pauseMenu.QuitToMainMenu();
-                    break;
-                case "back":
-                    pauseMenu.BackToMenu();   
-                    break;
-                case "decrease":
-                    setVolume.DecreaseVolume(0.1f);   
-                    break;
-                case "increase":
-                    setVolume.IncreaseVolume(0.1f);   
-                    break;
-                default:
-                    _response = "";
-                    break;
-            }
-            results.text = "In Pause Menu " + _response;
-            _response = "";
-        }
+    }
+    // Volume Commands for Sound of App 
+    private void VolumeCommands(){
         if(_Keyresponse == "volume" && PauseMenu.IsPaused){
             switch (_response)
             {
+                // Volume Rules
                 case "decrease":
-                    setVolume.DecreaseVolume(0.1f);   
+                    setVolume.Volume(-0.1f);   
                     break;
                 case "increase":
-                    setVolume.IncreaseVolume(0.1f);   
+                    setVolume.Volume(0.1f);   
                     break;
                 default:
                     _response = "";
@@ -93,11 +74,36 @@ public class GrammerController : MonoBehaviour
             results.text = "In Volume " + _response;
             _response = "";
         }
-        
+    }
+    // Voice Control for Pause Menu
+    private void PauseCommands(){
+        if(_Keyresponse == "pause" && PauseMenu.IsPaused){
+            switch (_response)
+            {
+                // Pause Menu Rules
+                case "continue":
+                    pauseMenu.Resume();
+                    break;
+                case "restart":
+                    pauseMenu.RestartLevel();
+                    break;
+                case "quit":
+                    pauseMenu.BackToMenu(); 
+                    break;
+                default:
+                    _response = "";
+                    break;
+            }
+            results.text = "In Pause Menu " + _response;
+            _response = "";
+        }
+    }
+    private void MovementCommands(){
         if(_Keyresponse == "movement" && !PauseMenu.IsPaused){
             
             switch (_response)
             {
+                // Player Rules
                 case "up":
                     player.UpSpeech();
                     break;
@@ -116,15 +122,20 @@ public class GrammerController : MonoBehaviour
             }
             results.text = "In Movement " + _response;
             _response = "";
-        }
-        if(_Keyresponse == "menu" && sceneO.buildIndex == 0){
+        }      
+    }
+    // Menu Comand when in Main Menu
+    private void MenuCommands(){
+        if(_Keyresponse == "menu"){
             switch (_response)
             {
+                // Menu Rules
                 case "start":
-                    SceneLoader(1);
+                    SceneManager.LoadScene(1);
                     break;
                 case "exit":
-                    QuitGame();
+                    Application.Quit();
+                    Debug.Log("Game is exiting");
                     break;
                 default:
                     _response = "";
@@ -133,41 +144,37 @@ public class GrammerController : MonoBehaviour
             results.text = "In Menu " + _response;
             _response = "";
         }
-         
     }
-    
-
+    // Determine the phrases match the user input from the XML file.  
     private void GR_OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
-        //Debug.Log("In Gr");
         StringBuilder message = new StringBuilder();
         //Read the semantic meanings from the args passed in
         SemanticMeaning[] meanings = args.semanticMeanings;
-        
         //use foreach to get all the meanings.
         foreach (SemanticMeaning meaning in meanings)
         {
+            // Get the Key and Value Strings from Input if matches.
             string keyString = meaning.key.Trim();
             var valueString = meaning.values[0].Trim();
 
             message.Append("Key " + keyString + "Value " + valueString + " ");
 
+            // Assign the Inputs to new Values for future use.
             _response = valueString;
             _Keyresponse = keyString;
-            //Debug.Log("This is the Key " + keyString);
-            
-            
         }
-        
         //use a string builder to create the string and out to the user.
         Debug.Log(message);
     }
+    // Stops the Grammer Recognizer
     private void OnApplicationQuit()
     {
         if (gr == null || !gr.IsRunning) return;
         gr.OnPhraseRecognized -= GR_OnPhraseRecognized;
         gr.Stop();
     }
+    // When Destroy then stop Grammer Recognizer
     private void OnDestroy()
     {
         if (gr != null)
@@ -178,15 +185,4 @@ public class GrammerController : MonoBehaviour
             gr = null; 
         }
     }
-
-    public void SceneLoader(int level){
-        SceneManager.LoadScene(level);
-    }
-    public void QuitGame()
-    {
-        Application.Quit();
-        Debug.Log("Game is exiting");
-    }
-
-
 }

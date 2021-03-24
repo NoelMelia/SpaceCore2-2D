@@ -2,20 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-
 public class Health : MonoBehaviour
 {
-    public int maxHealth = 5;
-    public int currentHealth;
+    private int maxHealth = 5;
+    [SerializeField]private int currentHealth;
     [SerializeField]public Text amountOfHealth;
     [SerializeField] private GameObject gameOverPanel;
-    public HealthBar healthBar;
-    public static Health instance;
+    [SerializeField] private HealthBar healthBar;
+    private static Health instance;
     private ScoreKeeper sc;
-    // Start is called before the first frame update
-
     private void Awake() {
+        // Singleton
         if (instance != null){
             Destroy(this.gameObject);
         }
@@ -26,15 +23,14 @@ public class Health : MonoBehaviour
     }
     void Start()
     {
-        
+        // Setting of the player at the beginning of Level
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
         amountOfHealth.text =  maxHealth.ToString();
     }
-
-    // Update is called once per frame
     void Update()
     {
+        // Check for amount of Health of Player
         amountOfHealth.text = currentHealth.ToString();
         if(currentHealth <= 0)
         {
@@ -42,7 +38,7 @@ public class Health : MonoBehaviour
             
         }
     }
-
+    //Player takes damage when hit by object
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
@@ -51,14 +47,10 @@ public class Health : MonoBehaviour
     }
 
     private void EndGame()
-    {
+    {// When the Player Dies
         Time.timeScale = 0f;
         Debug.Log("Game End");
-        //gameOverPanel.SetActive(true);
-        //sc.ResetGameScore();
         ScoreKeeper.instance.ResetGameScore();
-        //sc.ResetGameScore();
         gameOverPanel.SetActive(true);
-        //SceneManager.LoadScene(0);
     }
 }
