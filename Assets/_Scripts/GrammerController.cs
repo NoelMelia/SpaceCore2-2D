@@ -17,8 +17,11 @@ public class GrammerController : MonoBehaviour
     private Player player;
     [SerializeField]private Text results;
     private GrammarRecognizer gr;
+    private Health health;
 
     private void Start() {
+        _response = "";
+        _Keyresponse = "";
         // Load in the XML file
         gr = new GrammarRecognizer(Path.Combine(Application.streamingAssetsPath,  
         "MainMenu.xml"), ConfidenceLevel.Low); 
@@ -31,14 +34,17 @@ public class GrammerController : MonoBehaviour
         pauseMenu = FindObjectOfType<PauseMenu>();
         setVolume = FindObjectOfType<SetVolume>();
         player = FindObjectOfType<Player>();
+        health = FindObjectOfType<Health>();
     }
     private void Update() {
         //Switch between the Words Spoken
+        RestartCommand();
         PauseGameCommands();
         VolumeCommands();
         PauseCommands();
         MovementCommands();
         MenuCommands();
+        
     }
     // Checking that game is not paused and Command to pause game
     private void PauseGameCommands(){
@@ -77,13 +83,34 @@ public class GrammerController : MonoBehaviour
     }
     // Voice Control for Pause Menu
     private void PauseCommands(){
-        if(_Keyresponse == "pause" && PauseMenu.IsPaused){
+        if(_Keyresponse == "pause" && PauseMenu.IsPaused ){
             switch (_response)
             {
                 // Pause Menu Rules
                 case "continue":
                     pauseMenu.Resume();
                     break;
+                case "restart":
+                    pauseMenu.RestartLevel();
+                    break;
+                case "quit":
+                    pauseMenu.BackToMenu(); 
+                    break;
+                default:
+                    _response = "";
+                    break;
+            }
+            results.text = "In Pause Menu " + _response;
+            _response = "";
+        }
+        
+    }
+    // Voice Control for when the game is over and gameover  
+    // screen is active
+    private void RestartCommand(){
+        if(Health.active){
+            switch (_response)
+            {
                 case "restart":
                     pauseMenu.RestartLevel();
                     break;
@@ -145,6 +172,7 @@ public class GrammerController : MonoBehaviour
             _response = "";
         }
     }
+
     // Determine the phrases match the user input from the XML file.  
     private void GR_OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
@@ -166,6 +194,16 @@ public class GrammerController : MonoBehaviour
         }
         //use a string builder to create the string and out to the user.
         Debug.Log(message);
+    }
+    // Called in Button to go to New Scene
+    public void SceneLoader(int level){
+        SceneManager.LoadScene(level);
+    }
+    //Called when button is active
+    public void QuitGame()
+    {
+        Application.Quit();
+        Debug.Log("Game is exiting");
     }
     // Stops the Grammer Recognizer
     private void OnApplicationQuit()

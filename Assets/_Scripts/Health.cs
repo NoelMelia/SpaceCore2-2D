@@ -11,6 +11,7 @@ public class Health : MonoBehaviour
     [SerializeField] private HealthBar healthBar;
     private static Health instance;
     private ScoreKeeper sc;
+    public static bool active = false;
     private void Awake() {
         // Singleton
         if (instance != null){
@@ -27,6 +28,7 @@ public class Health : MonoBehaviour
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
         amountOfHealth.text =  maxHealth.ToString();
+        active = false;
     }
     void Update()
     {
@@ -35,7 +37,6 @@ public class Health : MonoBehaviour
         if(currentHealth <= 0)
         {
             EndGame(); 
-            
         }
     }
     //Player takes damage when hit by object
@@ -48,8 +49,8 @@ public class Health : MonoBehaviour
 
     private void EndGame()
     {// When the Player Dies
+        active = true;
         Time.timeScale = 0f;
-        Debug.Log("Game End");
         ScoreKeeper.instance.ResetGameScore();
         gameOverPanel.SetActive(true);
     }

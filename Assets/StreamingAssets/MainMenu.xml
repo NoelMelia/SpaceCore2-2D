@@ -10,11 +10,8 @@ xmlns="http://www.w3.org/2001/06/grammar" >
       <item>
         <ruleref uri="#options" />
       </item>
-      <item>
-        <ruleref uri="#VolLeft"/>
-      </item>
 			<item>
-        <ruleref uri="#VolRight"/>
+        <ruleref uri="#Volume"/>
       </item>
       <item>
         <ruleref uri="#movement" />
@@ -54,6 +51,7 @@ xmlns="http://www.w3.org/2001/06/grammar" >
           <item> begin game </item>
           <item> begin the game </item>
 
+          <item> begin new game </item>
           <item> new game </item>
 
           <item> start level </item>
@@ -69,18 +67,17 @@ xmlns="http://www.w3.org/2001/06/grammar" >
       <item>
         <tag>out.pause = "quit";</tag>
         <one-of>
-          <item> finish the game </item>
-          <item> finish game </item>
-
-          <item> quit the game </item>
-          <item> quit game </item>
-
-          <item> exit game </item>
-          <item> exit the game </item>
 
           <item> Back to Menu </item>
+          <item> Back to Main </item>
           <item> Go Back to Menu </item>
+          <item> Go Back to Main Menu </item>
+          <item> Go Back to Main </item>
           <item> Go Back </item>
+
+          <item> Return to Menu </item>
+          <item> Return to Main Menu </item>
+          <item> Return to Main </item>
         </one-of>
       </item>
       <item>
@@ -118,7 +115,19 @@ xmlns="http://www.w3.org/2001/06/grammar" >
       </item>
     </one-of>
   </rule>
-
+  <!-- Main Volume rule -->
+   <rule id="Volume">
+		<example> down </example>
+		<example> up </example>
+		<one-of>
+      <item>
+        <ruleref uri="#VolLeft"/>   
+      </item>
+      <item>
+        <ruleref uri="#VolRight"/>
+      </item>
+    </one-of>
+	</rule>
   <!-- Decrease Volume rule -->
   <rule id="VolLeft">
 		<example> decrease </example>
@@ -184,8 +193,8 @@ xmlns="http://www.w3.org/2001/06/grammar" >
 		<one-of>
 			<item> Move up </item>
       <item> Move Direction up </item>
-			<item> upward </item>
-			<item> upwards </item>
+			<item> Go up </item>
+			<item> Up </item>
 		</one-of>
 	</rule>
 
@@ -195,8 +204,9 @@ xmlns="http://www.w3.org/2001/06/grammar" >
     <tag> out.movement = "down"; </tag>
 		<one-of>
 			<item> Move down </item>
-			<item> downward </item>
-			<item> downwards </item>
+      <item> Move Direction down </item>
+			<item> Go down </item>
+			<item> down </item>
 		</one-of>
 	</rule>
 
@@ -206,11 +216,12 @@ xmlns="http://www.w3.org/2001/06/grammar" >
     <tag> out.movement = "stop fire"; </tag>
 		<one-of>
 			<item> Stop Firing </item>
-			<item> stop shoting</item>
+			<item> stop shooting</item>
 			<item> stop fire </item>
       <item> stop firing gun </item>
       <item> stop firing weapon </item>
       <item> weapon stop </item>
+      <item> stop weapon </item>
 		</one-of>
 	</rule>
 
@@ -223,6 +234,7 @@ xmlns="http://www.w3.org/2001/06/grammar" >
 			<item> fire </item>
 			<item> shoot </item>
       <item> start shoot </item>
+      <item> start shooting </item>
       <item> start firing </item>
 		</one-of>
 	</rule>

@@ -55,9 +55,9 @@ public class ScoreKeeper : MonoBehaviour
     private void OnDisable() {
         SceneManager.sceneLoaded -= OnScreenChange;
         // Set our high score.
-        PlayerPrefs.SetInt (highScoreKey, highScoreNum);
+        //PlayerPrefs.SetInt (highScoreKey, highScoreNum);
         // Save our data.
-        PlayerPrefs.Save();
+        //PlayerPrefs.Save();
         Debug.Log("I'm being Disabled! The high score is currently: " + highScoreNum);
     }
     private void OnScreenChange(Scene scene, LoadSceneMode loadSceneMode){
