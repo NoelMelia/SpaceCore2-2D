@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<grammar version="1.0" xml:lang="en-US" mode="voice"
+root="toplevel" tag-format="semantics/1.0"
+xmlns="http://www.w3.org/2001/06/grammar" >
+
+
+
+  <rule id="toplevel" scope="public">
+    <one-of>
+      <item>
+        <ruleref uri="#options" />
+      </item>
+      <item>
+        <ruleref uri="#VolLeft"/>
+      </item>
+			<item>
+        <ruleref uri="#VolRight"/>
+      </item>
+      <item>
+        <ruleref uri="#movement" />
+      </item>
+      <item>
+        <ruleref uri="#main" />
+      </item>
+    </one-of>
+  </rule>
+
+  <rule id="main">
+    <one-of>
+      <item>
+        <tag>out.menu = "exit";</tag>
+        <one-of>
+          <item> finish the game </item>
+          <item> exit game </item>
+          <item> quit game </item>
+        </one-of>
+      </item>
+      <item>
+        <tag>out.menu = "start";</tag>
+        <one-of>
+          <item> Start the game </item>
+          <item> begin game </item>
+          <item> new game </item>
+         </one-of>
+      </item>
+    </one-of>
+  </rule>
+
+  <rule id="options">
+    <one-of>
+      <item>
+        <tag>out.pause = "quit";</tag>
+        <one-of>
+          <item> finish the game </item>
+          <item> exit game </item>
+          <item> quit game </item>
+        </one-of>
+      </item>
+      <item>
+        <tag>out.pause = "continue";</tag>
+        <one-of>
+          <item> continue the game </item>
+          <item> resume game </item>
+          <item> continue game </item>
+        </one-of>
+      </item>
+      <item>
+        <tag>out.pause = "pause the game";</tag>
+        <one-of>
+          <item> Pause the game </item>
+          <item> Pause game </item>
+          <item> Stop the game </item>
+        </one-of>
+      </item>
+      <item>
+        <tag>out.pause = "restart";</tag>
+        <one-of>
+          <item> Restart Game </item>
+          <item> new Game </item>
+          <item> Restart the Game </item>
+          
+        </one-of>
+      </item>
+      <item>
+        <tag>out.pause = "back";</tag>
+        <one-of>
+          <item> Back to Menu </item>
+          <item> Go Back to Menu </item>
+          <item> Go Back </item>
+        </one-of>
+      </item>
+    </one-of>
+  </rule>
+
+  
+  <rule id="VolLeft">
+		<example> decrease </example>
+    <tag> out.volume = "decrease"; </tag>
+		<one-of>
+    
+    
+			<item> Volume left </item>
+			<item> Volume down </item>
+      <item> Reduce Volume </item>
+      <item> Decrease Volume </item>
+		</one-of>
+	</rule>
+	<rule id="VolRight">
+		<example> right </example>
+    <tag> out.volume = "increase"; </tag>
+		<one-of>
+			<item> Volume right </item>
+			<item> Volume up </item>
+      <item> Increase Volume </item>
+		</one-of>
+	</rule>
+
+  
+   <rule id="movement">
+		<example> down </example>
+		<example> up </example>
+		
+
+		<one-of>
+      <item>
+        <ruleref uri="#DirUp"/>
+        
+      </item>
+      <item>
+        <ruleref uri="#DirDown"/>
+        
+      </item>
+      <item>
+        <ruleref uri="#Stop"/>
+        
+      </item>
+      <item>
+        <ruleref uri="#Fire"/>
+        
+      </item>
+    </one-of>
+	</rule>
+  <rule id="DirUp">
+		<example> up </example>
+    <tag> out.movement = "up"; </tag>
+		<one-of>
+			<item> Move up </item>
+			<item> upward </item>
+			<item> upwards </item>
+		</one-of>
+	</rule>
+
+	<rule id="DirDown">
+		<example> down </example>
+    <tag> out.movement = "down"; </tag>
+		<one-of>
+			<item> Move down </item>
+			<item> downward </item>
+			<item> downwards </item>
+		</one-of>
+	</rule>
+  <rule id="Stop">
+		<example> stop fire</example>
+    <tag> out.movement = "stop fire"; </tag>
+		<one-of>
+			<item> Stop Firing </item>
+			<item> stop shoting</item>
+			<item> stop fire </item>
+      <item> stop gun </item>
+		</one-of>
+	</rule>
+  <rule id="Fire">
+		<example> fire </example>
+    <tag> out.movement = "fire"; </tag>
+		<one-of>
+			<item> Fire Shot </item>
+			<item> fire </item>
+			<item> shoot </item>
+      <item> start shoot </item>
+      <item> start firing </item>
+		</one-of>
+	</rule>
+  <rule id="Up">
+        <item>
+          Move up
+            <item>
+                <ruleref uri="#numbers"/>
+            </item>
+            
+        </item>
+    </rule>
+
+    <rule id="Down">
+        <item>
+            <item>
+                <ruleref uri="#numbers"/>
+            </item>
+            Move down
+        </item>
+    </rule>
+  <rule id="numbers">
+      <one-of>
+          <item>
+              one <tag> out="one"; </tag>
+          </item>
+          <item>
+              two <tag> out="two"; </tag>
+          </item>
+          <item>
+              three <tag> out="three"; </tag>
+          </item>
+        </one-of>
+  </rule>
+</grammar>

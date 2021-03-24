@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<grammar xml:lang="en"
+        tag-format="semantics/1.0"
+        version="1.0"
+        xmlns="http://www.w3.org/2001/06/grammar"
+        root="Entry">
+
+    <item>
+        <ruleref uri="#Action"/>
+        <tag> out.Action = rules.Action; </tag>
+    </item>  
+
+    <item>
+        <ruleref uri="#Direction"/>
+        <tag> out.Direction = rules.Direction; </tag>
+    </item>
+    <rule id="Action">
+		<example> move </example>
+
+		<one-of>
+			<item> move <tag> out = "move"; </tag> </item>
+			<item> moving <tag> out = "move"; </tag> </item>
+		</one-of>
+	</rule>
+    <rule id="Direction">
+		<example> left </example>
+		<example> up </example>
+		<example> forward </example>
+
+		<one-of>
+			<item>
+        		<ruleref uri="#DirLeft"/>
+        		<tag> out = "left"; </tag>
+      		</item>
+			<item>
+        		<ruleref uri="#DirRight"/>
+        		<tag> out = "right"; </tag>
+      		</item>
+      		<item>
+        		<ruleref uri="#DirUp"/>
+        		<tag> out = "up"; </tag>
+      		</item>
+      		<item>
+        		<ruleref uri="#DirDown"/>
+        		<tag> out = "down"; </tag>
+      		</item>
+      		<item>
+        		<ruleref uri="#DirForwards"/>
+        		<tag> out = "forwards"; </tag>
+      		</item>
+      		<item>
+        		<ruleref uri="#DirBackwards"/>
+        		<tag> out = "backwards"; </tag>
+      		</item>
+		</one-of>
+	</rule>
+
+	<rule id="DirLeft">
+		<example> left </example>
+
+		<one-of>
+			<item> left </item>
+			<item> clockwise </item>
+		</one-of>
+	</rule>
+
+	<rule id="DirRight">
+		<example> right </example>
+
+		<one-of>
+			<item> right </item>
+			<item> anti clockwise </item>
+		</one-of>
+	</rule>
+
+	<rule id="DirUp">
+		<example> up </example>
+
+		<one-of>
+			<item> up </item>
+			<item> upward </item>
+			<item> upwards </item>
+		</one-of>
+	</rule>
+
+	<rule id="DirDown">
+		<example> down </example>
+
+		<one-of>
+			<item> down </item>
+			<item> downward </item>
+			<item> downwards </item>
+		</one-of>
+	</rule>
+
+	<rule id="DirForwards">
+		<example> forwards </example>
+
+		<one-of>
+			<item> forwards </item>
+			<item> forward </item>
+			<item> in </item>
+			<item> away </item>
+		</one-of>
+	</rule>
+
+	<rule id="DirBackwards">
+		<example> backwards </example>
+
+		<one-of>
+			<item> backwards </item>
+			<item> backward </item>
+			<item> out </item>
+			<item> closer </item>
+		</one-of>
+	</rule>
+
+</grammar>
